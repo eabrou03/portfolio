@@ -542,39 +542,109 @@
             </section>
 
             <!-- CHECKPOINT 800M: FINISH PODIUM -->
-            <section id="ckpt-800" class="scroll-mt-28 relative pt-16 md:pt-20">
+            <section id="ckpt-800" class="scroll-mt-28 relative pt-16 md:pt-20 pb-16">
                 <div class="editorial-bg-title absolute top-0 left-0">800M / FINISH LINE</div>
 
-                <div class="bg-black/95 backdrop-blur text-white border-4 border-black p-8 md:p-12 pixel-border-lg relative z-10 text-center space-y-6">
-                    <div class="w-20 h-20 bg-yellow-400 border-4 border-white rounded-full flex items-center justify-center mx-auto text-4xl text-black shadow-lg animate-bounce">
-                        🥇
+                <div class="space-y-6 relative z-10">
+                    <!-- Congratulations Card -->
+                    <div class="bg-white/95 backdrop-blur border-4 border-black p-6 pixel-border-lg">
+                        <div class="bg-track-orange text-white font-mono-code font-bold text-xs px-3 py-1 uppercase border-b-2 border-black inline-block mb-3">
+                            800M &mdash; FINISH LINE
+                        </div>
+                        <h3 class="text-xl font-black text-black font-mono-code uppercase mb-2">GOLD MEDAL PODIUM</h3>
+                        <p class="text-xs md:text-sm font-mono-code text-gray-800 font-bold leading-relaxed">
+                            Congratulations! You completed the 800m race. Bridging engineering science, leadership, and athletic endurance.
+                        </p>
                     </div>
 
-                    <h2 class="text-3xl md:text-4xl font-black uppercase text-yellow-400 tracking-tight">
-                        800M GOLD MEDAL FINISH
-                    </h2>
+                    <!-- Main Finish Banner Box -->
+                    <div class="bg-black/95 backdrop-blur text-white border-4 border-black p-8 md:p-12 pixel-border-lg text-center space-y-6">
+                        <div class="w-20 h-20 bg-yellow-400 border-4 border-white rounded-full flex items-center justify-center mx-auto text-4xl text-black shadow-lg animate-bounce">
+                            🥇
+                        </div>
 
-                    <p class="text-sm font-mono-code text-gray-300 max-w-2xl mx-auto">
-                        ETHAN BROUW &bull; NCAA ALL-AMERICAN &bull; MECHANICAL ENGINEER &bull; MBA '27
-                    </p>
+                        <h2 class="text-3xl md:text-4xl font-black uppercase text-yellow-400 tracking-tight font-mono-code">
+                            800M GOLD MEDAL FINISH
+                        </h2>
 
-                    <p class="text-xs text-gray-400 max-w-xl mx-auto leading-relaxed">
-                        Ready to connect on engineering consulting, business strategy, or high-performance leadership.
-                    </p>
+                        <p class="text-xs md:text-sm font-mono-code text-gray-300 max-w-2xl mx-auto tracking-wider uppercase font-bold">
+                            ETHAN BROUW &bull; NCAA ALL-AMERICAN &bull; MECHANICAL ENGINEER &bull; MBA '27
+                        </p>
 
-                    <div class="flex flex-wrap justify-center gap-4 pt-4">
-                        <a href="mailto:eab252@gmail.com" class="pixel-btn bg-track-orange text-white font-mono-code font-bold text-xs px-6 py-3 border-2 border-white">
-                            <i class="fa-solid fa-envelope mr-2"></i>CONTACT ETHAN
-                        </a>
-                        <button onclick="toggleViewMode()" class="pixel-btn bg-white text-black font-mono-code font-bold text-xs px-6 py-3 border-2 border-white">
-                            <i class="fa-solid fa-file-pdf mr-2"></i>VIEW RESUME DOC
-                        </button>
+                        <p class="text-xs text-gray-400 max-w-xl mx-auto leading-relaxed font-mono-code">
+                            Ready to connect on engineering consulting, business strategy, or high-performance leadership.
+                        </p>
+
+                        <div class="flex flex-wrap justify-center gap-4 pt-4">
+                            <a href="mailto:eab252@gmail.com" class="pixel-btn bg-track-orange text-white font-mono-code font-bold text-xs px-6 py-3 border-2 border-white">
+                                <i class="fa-solid fa-envelope mr-2"></i>CONTACT ETHAN
+                            </a>
+                            <button onclick="toggleViewMode()" class="pixel-btn bg-white text-black font-mono-code font-bold text-xs px-6 py-3 border-2 border-white">
+                                <i class="fa-solid fa-file-pdf mr-2"></i>VIEW RESUME DOC
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
 
         </div>
     </main>
+
+    <!-- 800M FINISH LINE MODAL POPUP -->
+    <div id="finish-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm hidden">
+        <div class="bg-white border-4 border-black p-6 md:p-8 max-w-2xl w-full pixel-border-lg relative text-center space-y-6 font-mono-code">
+            <!-- Close Button -->
+            <button onclick="closeFinishModal()" class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white font-bold text-sm px-3 py-1 border-2 border-black pixel-btn">
+                X
+            </button>
+
+            <!-- Medal Icon -->
+            <div class="w-16 h-16 bg-yellow-400 border-4 border-black rounded-full flex items-center justify-center mx-auto text-3xl shadow-md">
+                🥇
+            </div>
+
+            <!-- Title & Subtitle -->
+            <div>
+                <h2 class="text-2xl md:text-3xl font-black text-track-orange uppercase tracking-tight">
+                    800M GOLD MEDAL FINISH!
+                </h2>
+                <p class="text-[11px] md:text-xs font-bold text-black uppercase mt-1 tracking-wider">
+                    ETHAN BROUW &bull; ALL-AMERICAN & MECHANICAL ENGINEER & MBA
+                </p>
+            </div>
+
+            <!-- 3 Horizons Summary Box -->
+            <div class="bg-amber-50/80 border-2 border-black p-4 text-left space-y-3 pixel-border">
+                <h4 class="font-extrabold text-xs text-black border-b-2 border-black pb-2 uppercase tracking-wide">
+                    3 HORIZONS SUMMARY & VISION:
+                </h4>
+                <ul class="text-[11px] text-gray-900 space-y-2 leading-relaxed">
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-black select-none">&bull;</span>
+                        <span><strong>H1 / Perform:</strong> Task execution, calm demeanor, high systems ownership, reading the room to empower teams.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-black select-none">&bull;</span>
+                        <span><strong>H2 / Transform:</strong> Dedicated alter-ego mindset via visualization and elite athletic focus.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="font-bold text-black select-none">&bull;</span>
+                        <span><strong>H3 / Explore:</strong> Balanced mental rhetoric uniting physical ergogenic design & engineering science.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 pt-2">
+                <a href="mailto:eab252@gmail.com" class="pixel-btn bg-black text-white font-bold text-xs px-6 py-3 border-2 border-black">
+                    <i class="fa-solid fa-envelope mr-2"></i>CONTACT ETHAN
+                </a>
+                <button onclick="toggleViewMode(); closeFinishModal();" class="pixel-btn bg-track-orange text-white font-bold text-xs px-6 py-3 border-2 border-black">
+                    <i class="fa-solid fa-file-pdf mr-2"></i>VIEW RESUME DOC
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- ALTERNATIVE FAST-TRACK DOCUMENT VIEW (Hidden by default) -->
     <div id="fast-track-container" class="hidden pt-24 pb-16 px-4 max-w-5xl mx-auto space-y-8 font-mono-code relative z-20">
@@ -1019,14 +1089,30 @@
         }
 
         let confettiTriggered = false;
+        let modalShown = false;
+
         function triggerConfetti() {
-            if (confettiTriggered) return;
-            confettiTriggered = true;
-            confetti({
-                particleCount: 160,
-                spread: 100,
-                origin: { y: 0.6 }
-            });
+            if (!confettiTriggered) {
+                confettiTriggered = true;
+                confetti({
+                    particleCount: 160,
+                    spread: 100,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            if (!modalShown) {
+                modalShown = true;
+                setTimeout(() => {
+                    const modal = document.getElementById('finish-modal');
+                    if (modal) modal.classList.remove('hidden');
+                }, 400);
+            }
+        }
+
+        function closeFinishModal() {
+            const modal = document.getElementById('finish-modal');
+            if (modal) modal.classList.add('hidden');
         }
 
         function toggleViewMode() {
@@ -1057,6 +1143,8 @@
             currentMeter = 0;
             currentLane = 1;
             confettiTriggered = false;
+            modalShown = false;
+            closeFinishModal();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             updateHUD();
             drawWindingTrack();
