@@ -645,17 +645,28 @@
             const w = trackCanvas.width;
             const h = trackCanvas.height;
 
-            // Generate a continuous, smooth serpentine curve running from top to bottom
-            const numPoints = 160;
-            const amplitude = Math.min(w * 0.28, 340); // Sweep width relative to screen width
+            // Align 0m track start directly alongside the 000M / BLOCKS heading
+            const ckpt0 = document.getElementById('ckpt-0');
+            const startY = ckpt0 ? (ckpt0.offsetTop + 45) : 140;
+
+            const ckpt800 = document.getElementById('ckpt-800');
+            const endY = ckpt800 ? (ckpt800.offsetTop + 140) : (h - 200);
+
+            const trackLengthY = Math.max(400, endY - startY);
+
+            // Generate a smooth serpentine curve with wider sweep amplitude across page margins
+            const numPoints = 180;
+            // Expanded amplitude to oscillate wider into empty side margins (up to 40% of screen width)
+            const amplitude = Math.min(w * 0.40, 580);
             const centerX = w / 2;
 
             const rawPoints = [];
             for (let i = 0; i <= numPoints; i++) {
                 const progress = i / numPoints;
-                const y = progress * h;
-                // Elegant mathematical sine-wave flow down the document height
-                const x = centerX + Math.sin(progress * Math.PI * 4.5) * amplitude;
+                const y = startY + progress * trackLengthY;
+                
+                // Sine-wave flow adjusted so 0m starts elegantly beside the heading
+                const x = centerX + Math.sin(progress * Math.PI * 4.5 + 0.35) * amplitude;
                 rawPoints.push({ x, y });
             }
 
@@ -729,11 +740,11 @@
             drawOffsetLine(-53, '#000000', 4); // Left Outer Border Line
             drawOffsetLine(53, '#000000', 4);  // Right Outer Border Line
 
-            // Inner Dashed Lane Dividers (Matching reference screenshot)
+            // Inner Dashed Lane Dividers
             drawOffsetLine(-17, '#000000', 2, [14, 12]); // Lane 1 / Lane 2
             drawOffsetLine(17, '#000000', 2, [14, 12]);  // Lane 2 / Lane 3
 
-            // 3. Draw Starting Blocks & Finish Markings
+            // 3. Draw Starting Blocks & Finish Markings next to Checkpoint 0M
             if (denseTrackPoints.length > 0) {
                 const startPt = denseTrackPoints[0];
                 drawStartingBlocks(startPt);
@@ -926,11 +937,24 @@
         function bindScrollEvents() {
             window.addEventListener('scroll', () => {
                 if (isViewModeFastTrack) return;
-                const scrollTop = window.scrollY;
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                const scrollPercent = Math.max(0, Math.min(1, scrollTop / (maxScroll || 1)));
-                
-                currentMeter = Math.round(scrollPercent * 800);
+
+                const ckpt0 = document.getElementById('ckpt-0');
+                const ckpt800 = document.getElementById('ckpt-800');
+
+                if (ckpt0 && ckpt800) {
+                    const startY = ckpt0.offsetTop - 100;
+                    const endY = ckpt800.offsetTop - 100;
+                    const scrollY = window.scrollY;
+
+                    const scrollPercent = Math.max(0, Math.min(1, (scrollY - startY) / (endY - startY || 1)));
+                    currentMeter = Math.round(scrollPercent * 800);
+                } else {
+                    const scrollTop = window.scrollY;
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    const scrollPercent = Math.max(0, Math.min(1, scrollTop / (maxScroll || 1)));
+                    currentMeter = Math.round(scrollPercent * 800);
+                }
+
                 updateHUD();
                 drawWindingTrack();
 
