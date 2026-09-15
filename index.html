@@ -639,103 +639,27 @@
         }
 
         function updateTrackWaypoints() {
-            trackWaypoints = [];
             denseTrackPoints = [];
             if (!trackCanvas) return;
 
             const w = trackCanvas.width;
             const h = trackCanvas.height;
 
-            // Start waypoint centered at top with sufficient margin for starting blocks
-            trackWaypoints.push({ x: w / 2, y: 100 });
+            // Generate a continuous, smooth serpentine curve running from top to bottom
+            const numPoints = 160;
+            const amplitude = Math.min(w * 0.28, 340); // Sweep width relative to screen width
+            const centerX = w / 2;
 
-            const checkpointIds = [
-                { id: 'ckpt-0', side: 'left' },
-                { id: 'ckpt-150', side: 'right' },
-                { id: 'ckpt-300', side: 'left' },
-                { id: 'ckpt-450', side: 'right' },
-                { id: 'ckpt-550', side: 'left' },
-                { id: 'ckpt-750', side: 'right' },
-                { id: 'ckpt-800', side: 'center' }
-            ];
-
-            const buffer = 95; // Wide berth buffer from card edge
-
-            checkpointIds.forEach((item, idx) => {
-                const el = document.getElementById(item.id);
-                if (el) {
-                    const rect = el.getBoundingClientRect();
-                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-                    const topY = rect.top + scrollTop;
-                    const bottomY = rect.bottom + scrollTop;
-                    const centerY = (topY + bottomY) / 2;
-
-                    let targetX = w / 2;
-                    if (item.side === 'left') {
-                        targetX = Math.max(65, rect.left - buffer);
-                    } else if (item.side === 'right') {
-                        targetX = Math.min(w - 65, rect.right + buffer);
-                    } else {
-                        targetX = w / 2;
-                    }
-
-                    // Add smooth sweeping waypoints around each checkpoint card
-                    if (idx > 0) {
-                        const prevWp = trackWaypoints[trackWaypoints.length - 1];
-                        trackWaypoints.push({
-                            x: (prevWp.x + targetX) / 2,
-                            y: (prevWp.y + topY) / 2
-                        });
-                    }
-
-                    trackWaypoints.push({ x: targetX, y: centerY });
-                }
-            });
-
-            // Final waypoint at bottom center finish line
-            trackWaypoints.push({ x: w / 2, y: h - 80 });
-
-            // Generate dense smooth curve using Catmull-Rom Spline interpolation
-            generateDenseSplinePoints();
-        }
-
-        // Catmull-Rom Spline evaluation function for smooth flowing curves
-        function catmullRom(p0, p1, p2, p3, t) {
-            const t2 = t * t;
-            const t3 = t2 * t;
-            return {
-                x: 0.5 * ((2 * p1.x) + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3),
-                y: 0.5 * ((2 * p1.y) + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3)
-            };
-        }
-
-        function generateDenseSplinePoints() {
-            if (trackWaypoints.length < 2) return;
-
-            // Pad control points for end-to-end Catmull-Rom calculation
-            const pts = [
-                trackWaypoints[0],
-                ...trackWaypoints,
-                trackWaypoints[trackWaypoints.length - 1]
-            ];
-
-            const stepsPerSegment = 40;
             const rawPoints = [];
-
-            for (let i = 1; i < pts.length - 2; i++) {
-                const p0 = pts[i - 1];
-                const p1 = pts[i];
-                const p2 = pts[i + 1];
-                const p3 = pts[i + 2];
-
-                for (let step = 0; step < stepsPerSegment; step++) {
-                    const t = step / stepsPerSegment;
-                    rawPoints.push(catmullRom(p0, p1, p2, p3, t));
-                }
+            for (let i = 0; i <= numPoints; i++) {
+                const progress = i / numPoints;
+                const y = progress * h;
+                // Elegant mathematical sine-wave flow down the document height
+                const x = centerX + Math.sin(progress * Math.PI * 4.5) * amplitude;
+                rawPoints.push({ x, y });
             }
-            rawPoints.push(pts[pts.length - 2]);
 
-            // Compute tangents, angles, and normal vectors along the continuous curve
+            // Calculate tangents, angles, and normal vectors for proper lane rendering
             denseTrackPoints = rawPoints.map((pt, i) => {
                 const prev = rawPoints[Math.max(0, i - 1)];
                 const next = rawPoints[Math.min(rawPoints.length - 1, i + 1)];
@@ -747,7 +671,7 @@
                 const tangentX = dx / len;
                 const tangentY = dy / len;
 
-                // Perpendicular normal vector for lane width calculation
+                // Perpendicular normal vector for lane lines
                 const normalX = -tangentY;
                 const normalY = tangentX;
                 const angle = Math.atan2(dy, dx);
@@ -756,7 +680,7 @@
             });
         }
 
-        // Returns {x, y, normalX, normalY, angle} along the continuous spline curve for progress p [0..1]
+        // Returns {x, y, normalX, normalY, angle} along the continuous curve for progress p [0..1]
         function getTrackPointAtProgress(p) {
             if (!denseTrackPoints || denseTrackPoints.length === 0) {
                 return { x: trackCanvas ? trackCanvas.width / 2 : 200, y: p * 1000, normalX: 1, normalY: 0, angle: Math.PI / 2 };
@@ -772,8 +696,8 @@
 
             trackCtx.clearRect(0, 0, w, h);
 
-            // 1. Draw Terracotta Red Track Surface (Width 100px)
-            trackCtx.lineWidth = 100;
+            // 1. Draw Terracotta Red Track Base (Width 110px)
+            trackCtx.lineWidth = 110;
             trackCtx.strokeStyle = '#C84C31';
             trackCtx.lineCap = 'round';
             trackCtx.lineJoin = 'round';
@@ -784,7 +708,7 @@
             });
             trackCtx.stroke();
 
-            // 2. Draw Outer Borders and Inner Lane Lines smoothly
+            // 2. Draw Solid Black Outer Borders and Dashed Inner Lane Dividers
             const drawOffsetLine = (offset, color, width, dash = []) => {
                 trackCtx.lineWidth = width;
                 trackCtx.strokeStyle = color;
@@ -802,14 +726,14 @@
                 trackCtx.setLineDash([]);
             };
 
-            drawOffsetLine(-48, '#000000', 4); // Left Outer Border
-            drawOffsetLine(48, '#000000', 4);  // Right Outer Border
+            drawOffsetLine(-53, '#000000', 4); // Left Outer Border Line
+            drawOffsetLine(53, '#000000', 4);  // Right Outer Border Line
 
-            // Lane Dividers (2 inner dashed black lines)
-            drawOffsetLine(-16, '#000000', 2, [12, 10]); // Lane 1 / Lane 2
-            drawOffsetLine(16, '#000000', 2, [12, 10]);  // Lane 2 / Lane 3
+            // Inner Dashed Lane Dividers (Matching reference screenshot)
+            drawOffsetLine(-17, '#000000', 2, [14, 12]); // Lane 1 / Lane 2
+            drawOffsetLine(17, '#000000', 2, [14, 12]);  // Lane 2 / Lane 3
 
-            // 3. Draw Starting Blocks & Finish Line Markings
+            // 3. Draw Starting Blocks & Finish Markings
             if (denseTrackPoints.length > 0) {
                 const startPt = denseTrackPoints[0];
                 drawStartingBlocks(startPt);
@@ -823,8 +747,8 @@
             const currentP = Math.max(0, Math.min(1, currentMeter / 800));
             const runnerPt = getTrackPointAtProgress(currentP);
 
-            // Lane Offset (-1: Left, 0: Center, 1: Right) -> [-30px, 0px, +30px]
-            const laneOffset = (currentLane - 1) * 30;
+            // Lane Offset (-1: Left, 0: Center, 1: Right) -> [-32px, 0px, +32px]
+            const laneOffset = (currentLane - 1) * 32;
             const rX = runnerPt.x + runnerPt.normalX * laneOffset;
             const rY = runnerPt.y + runnerPt.normalY * laneOffset;
 
