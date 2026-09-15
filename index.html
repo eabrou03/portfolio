@@ -69,23 +69,28 @@
 
         /* Large Mayaportal Editorial Watermark Text */
         .editorial-bg-title {
-            font-size: clamp(3rem, 7vw, 7.5rem);
+            font-size: clamp(2.5rem, 6vw, 6.5rem);
             font-weight: 900;
             letter-spacing: -0.05em;
             line-height: 0.85;
             text-transform: uppercase;
-            color: rgba(0, 0, 0, 0.06);
+            color: rgba(0, 0, 0, 0.05);
             user-select: none;
             pointer-events: none;
         }
 
-        /* Track line background patterns */
-        .track-pattern {
-            background-color: #C84C31;
-            background-image: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255, 255, 255, 0.7) 40px, rgba(255, 255, 255, 0.7) 43px);
+        /* Canvas track backdrop container styling */
+        #track-canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        /* Scrollbar styling */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -145,11 +150,16 @@
         </div>
     </header>
 
+    <!-- FULL PAGE WINDING CANVAS TRACK BACKGROUND -->
+    <div id="track-canvas-container">
+        <canvas id="winding-track-canvas"></canvas>
+    </div>
+
     <!-- MAIN ARCADE & EDITORIAL TRACK VIEW -->
-    <main id="arcade-container" class="relative pt-20 min-h-screen">
+    <main id="arcade-container" class="relative pt-24 min-h-screen z-10">
 
         <!-- SIDE QUICK NAVIGATION DIRECTORY -->
-        <aside class="fixed left-4 top-24 z-40 hidden 2xl:block w-60 bg-white border-3 border-black p-3.5 pixel-border font-mono-code text-xs">
+        <aside class="fixed left-4 top-24 z-40 hidden 2xl:block w-60 bg-white/95 backdrop-blur border-3 border-black p-3.5 pixel-border font-mono-code text-xs shadow-lg">
             <h2 class="font-extrabold border-b-2 border-black pb-1 mb-2 uppercase text-track-orange flex justify-between items-center text-[11px]">
                 <span>RACE CHECKPOINTS</span>
                 <i class="fa-solid fa-flag-checkered"></i>
@@ -167,30 +177,25 @@
             <div class="mt-4 pt-3 border-t-2 border-black text-[10px] text-gray-700">
                 <p class="font-bold uppercase text-black mb-1"><i class="fa-solid fa-gamepad mr-1"></i> CONTROLS:</p>
                 <p>&bull; Scroll or Up/Down to Run</p>
-                <p>&bull; Left/Right Arrows to Steer</p>
+                <p>&bull; Left/Right Arrows to Steer Lanes</p>
             </div>
         </aside>
 
-        <!-- CENTER ANIMATED RUNNING CANVAS STRIP -->
-        <div class="fixed top-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none hidden lg:block">
-            <canvas id="runner-strip-canvas" width="120" height="700" class="block"></canvas>
-        </div>
-
-        <!-- CHECKPOINTS EDITORIAL STACK -->
-        <div class="max-w-6xl mx-auto px-4 py-8 space-y-32 relative z-10">
+        <!-- CHECKPOINTS EDITORIAL CONTENT STACK -->
+        <div class="max-w-5xl mx-auto px-4 py-8 space-y-40 relative z-10">
 
             <!-- CHECKPOINT 0M: THESIS & BLOCKS -->
             <section id="ckpt-0" class="scroll-mt-28 relative">
                 <div class="editorial-bg-title absolute -top-10 left-0">000M / BLOCKS</div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                    <div class="lg:col-span-8 bg-white border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10">
+                    <div class="lg:col-span-8 bg-white/95 backdrop-blur border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10">
                         <div class="flex items-center justify-between border-b-4 border-black pb-3 mb-4">
                             <span class="bg-black text-white font-mono-code font-bold text-xs px-3 py-1 uppercase">CHECKPOINT 0M</span>
                             <span class="font-mono-code font-black text-track-orange text-sm">STARTING BLOCKS</span>
                         </div>
 
-                        <h2 class="text-2xl md:text-3xl font-black tracking-tight text-black uppercase mb-2">
+                        <h2 class="text-2xl md:text-3xl font-black tracking-tight text-black uppercase mb-3">
                             WORKING THESIS — CURIOSITY & UNTAMED WONDER
                         </h2>
                         
@@ -200,14 +205,14 @@
 
                         <!-- QUOTES GRID -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-orange-50 border-2 border-black p-4 pixel-border">
+                            <div class="bg-orange-50/90 border-2 border-black p-4 pixel-border">
                                 <p class="text-xs italic font-semibold text-gray-900 leading-normal">
                                     "The best time to plant a tree was 30 years ago. The second best time is now."
                                 </p>
                                 <span class="block font-mono-code text-[11px] font-bold text-track-orange mt-2 uppercase">&mdash; Chinese Proverb</span>
                             </div>
 
-                            <div class="bg-yellow-50 border-2 border-black p-4 pixel-border">
+                            <div class="bg-yellow-50/90 border-2 border-black p-4 pixel-border">
                                 <p class="text-xs italic font-semibold text-gray-900 leading-normal">
                                     "I think age is terribly overrated. You're okay as long as you don't grow up. By all means, grow old, but don't mature. Remain childlike, retain wonder, the ability to be flabbergasted by something."
                                 </p>
@@ -233,7 +238,7 @@
             <section id="ckpt-150" class="scroll-mt-28 relative">
                 <div class="editorial-bg-title absolute -top-10 right-0 text-right">150M / PITCH REALITY</div>
 
-                <div class="bg-white border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10 space-y-6">
+                <div class="bg-white/95 backdrop-blur border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10 space-y-6">
                     <div class="flex flex-wrap items-center justify-between border-b-4 border-black pb-3">
                         <span class="bg-track-orange text-white font-mono-code font-bold text-xs px-3 py-1 uppercase">CHECKPOINT 150M</span>
                         <h2 class="text-xl md:text-2xl font-black uppercase text-black">WHY ME? WHY NOW? &bull; PITCH DECK</h2>
@@ -246,7 +251,7 @@
                     <!-- 3 SLIDES GRID -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Slide 1 -->
-                        <div class="border-3 border-black p-5 bg-gray-50 pixel-border flex flex-col justify-between">
+                        <div class="border-3 border-black p-5 bg-gray-50/90 pixel-border flex flex-col justify-between">
                             <div>
                                 <span class="bg-black text-white font-mono-code font-bold text-[10px] px-2 py-0.5 uppercase inline-block mb-3">SLIDE 1</span>
                                 <h3 class="font-bold text-base text-black mb-3 border-b-2 border-black pb-1">The Reality I See</h3>
@@ -264,7 +269,7 @@
                         </div>
 
                         <!-- Slide 2 -->
-                        <div class="border-3 border-black p-5 bg-orange-50 pixel-border flex flex-col justify-between">
+                        <div class="border-3 border-black p-5 bg-orange-50/90 pixel-border flex flex-col justify-between">
                             <div>
                                 <span class="bg-track-orange text-white font-mono-code font-bold text-[10px] px-2 py-0.5 uppercase inline-block mb-3">SLIDE 2</span>
                                 <h3 class="font-bold text-base text-black mb-3 border-b-2 border-black pb-1">The Reality of Me</h3>
@@ -286,7 +291,7 @@
                         </div>
 
                         <!-- Slide 3 -->
-                        <div class="border-3 border-black p-5 bg-yellow-50 pixel-border flex flex-col justify-between">
+                        <div class="border-3 border-black p-5 bg-yellow-50/90 pixel-border flex flex-col justify-between">
                             <div>
                                 <span class="bg-yellow-400 text-black font-mono-code font-bold text-[10px] px-2 py-0.5 uppercase inline-block mb-3">SLIDE 3</span>
                                 <h3 class="font-bold text-base text-black mb-3 border-b-2 border-black pb-1">Why Me? Why Now?</h3>
@@ -310,7 +315,7 @@
             <section id="ckpt-300" class="scroll-mt-28 relative">
                 <div class="editorial-bg-title absolute -top-10 left-0">300M / PRESENCE WHEEL</div>
 
-                <div class="bg-white border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10">
+                <div class="bg-white/95 backdrop-blur border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10">
                     <div class="flex flex-wrap items-center justify-between border-b-4 border-black pb-3 mb-6">
                         <span class="bg-black text-white font-mono-code font-bold text-xs px-3 py-1 uppercase">CHECKPOINT 300M</span>
                         <h2 class="text-xl md:text-2xl font-black uppercase text-black">LEADERSHIP REALITY & PRESENCE WHEEL</h2>
@@ -379,7 +384,7 @@
             <section id="ckpt-450" class="scroll-mt-28 relative">
                 <div class="editorial-bg-title absolute -top-10 right-0 text-right">450M / DEFINING MOMENTS</div>
 
-                <div class="bg-white border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10 space-y-6">
+                <div class="bg-white/95 backdrop-blur border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10 space-y-6">
                     <div class="flex flex-wrap items-center justify-between border-b-4 border-black pb-3">
                         <span class="bg-track-orange text-white font-mono-code font-bold text-xs px-3 py-1 uppercase">CHECKPOINT 450M</span>
                         <h2 class="text-xl md:text-2xl font-black uppercase text-black">THE MOMENTS THAT DEFINED ME</h2>
@@ -455,7 +460,7 @@
             <section id="ckpt-550" class="scroll-mt-28 relative">
                 <div class="editorial-bg-title absolute -top-10 left-0">550M / STADIUM LABS</div>
 
-                <div class="bg-white border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10 space-y-6">
+                <div class="bg-white/95 backdrop-blur border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10 space-y-6">
                     <div class="flex flex-wrap items-center justify-between border-b-4 border-black pb-3">
                         <div class="flex items-center gap-3">
                             <span class="bg-black text-white font-mono-code font-bold text-xs px-3 py-1 uppercase">CHECKPOINT 550M</span>
@@ -495,14 +500,14 @@
             <section id="ckpt-750" class="scroll-mt-28 relative">
                 <div class="editorial-bg-title absolute -top-10 right-0 text-right">750M / THREE HORIZONS</div>
 
-                <div class="bg-white border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10 space-y-6">
+                <div class="bg-white/95 backdrop-blur border-4 border-black p-6 md:p-8 pixel-border-lg relative z-10 space-y-6">
                     <div class="flex flex-wrap items-center justify-between border-b-4 border-black pb-3">
                         <span class="bg-track-orange text-white font-mono-code font-bold text-xs px-3 py-1 uppercase">CHECKPOINT 750M</span>
                         <h2 class="text-xl md:text-2xl font-black uppercase text-black">THREE HORIZONS ARCHITECTURE</h2>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="border-3 border-black p-5 bg-orange-50 pixel-border flex flex-col justify-between">
+                        <div class="border-3 border-black p-5 bg-orange-50/90 pixel-border flex flex-col justify-between">
                             <div>
                                 <span class="bg-black text-white font-mono-code font-bold text-xs px-2.5 py-1 uppercase inline-block mb-3">H1 / PERFORM</span>
                                 <h3 class="font-black text-base text-black mb-2">Execution & Presence</h3>
@@ -512,7 +517,7 @@
                             </div>
                         </div>
 
-                        <div class="border-3 border-black p-5 bg-yellow-50 pixel-border flex flex-col justify-between">
+                        <div class="border-3 border-black p-5 bg-yellow-50/90 pixel-border flex flex-col justify-between">
                             <div>
                                 <span class="bg-track-orange text-white font-mono-code font-bold text-xs px-2.5 py-1 uppercase inline-block mb-3">H2 / TRANSFORM</span>
                                 <h3 class="font-black text-base text-black mb-2">Alter Ego & Mindset</h3>
@@ -522,7 +527,7 @@
                             </div>
                         </div>
 
-                        <div class="border-3 border-black p-5 bg-green-50 pixel-border flex flex-col justify-between">
+                        <div class="border-3 border-black p-5 bg-green-50/90 pixel-border flex flex-col justify-between">
                             <div>
                                 <span class="bg-black text-white font-mono-code font-bold text-xs px-2.5 py-1 uppercase inline-block mb-3">H3 / EXPLORE</span>
                                 <h3 class="font-black text-base text-black mb-2">Mental Rhetoric</h3>
@@ -539,7 +544,7 @@
             <section id="ckpt-800" class="scroll-mt-28 relative">
                 <div class="editorial-bg-title absolute -top-10 left-0">800M / FINISH LINE</div>
 
-                <div class="bg-black text-white border-4 border-black p-8 md:p-12 pixel-border-lg relative z-10 text-center space-y-6">
+                <div class="bg-black/95 backdrop-blur text-white border-4 border-black p-8 md:p-12 pixel-border-lg relative z-10 text-center space-y-6">
                     <div class="w-20 h-20 bg-yellow-400 border-4 border-white rounded-full flex items-center justify-center mx-auto text-4xl text-black shadow-lg animate-bounce">
                         🥇
                     </div>
@@ -571,7 +576,7 @@
     </main>
 
     <!-- ALTERNATIVE FAST-TRACK DOCUMENT VIEW (Hidden by default) -->
-    <div id="fast-track-container" class="hidden pt-24 pb-16 px-4 max-w-5xl mx-auto space-y-8 font-mono-code">
+    <div id="fast-track-container" class="hidden pt-24 pb-16 px-4 max-w-5xl mx-auto space-y-8 font-mono-code relative z-20">
         
         <div class="bg-white border-4 border-black p-6 pixel-border">
             <div class="flex flex-wrap justify-between items-start gap-4 border-b-2 border-black pb-4 mb-4">
@@ -611,88 +616,200 @@
         let currentMeter = 0;
         let currentLane = 1; // 0: Left, 1: Center, 2: Right
         let isViewModeFastTrack = false;
-        let stripCanvas, stripCtx;
+        let trackCanvas, trackCtx;
 
-        function initRunnerStrip() {
-            stripCanvas = document.getElementById('runner-strip-canvas');
-            if (!stripCanvas) return;
-            stripCtx = stripCanvas.getContext('2d');
-            drawRunnerStrip();
+        function resizeTrackCanvas() {
+            trackCanvas = document.getElementById('winding-track-canvas');
+            if (!trackCanvas) return;
+            trackCtx = trackCanvas.getContext('2d');
+
+            const pageHeight = Math.max(
+                document.documentElement.scrollHeight,
+                document.body.scrollHeight,
+                window.innerHeight
+            );
+            trackCanvas.width = window.innerWidth;
+            trackCanvas.height = pageHeight;
+
+            drawWindingTrack();
         }
 
-        function drawRunnerStrip() {
-            if (!stripCtx) return;
-            const w = stripCanvas.width;
-            const h = stripCanvas.height;
+        // Returns {x, y, normalX, normalY, angle} along the snaking track curve for a given progress [0..1]
+        function getTrackPointAtProgress(p) {
+            const w = trackCanvas.width;
+            const h = trackCanvas.height;
 
-            stripCtx.clearRect(0, 0, w, h);
+            // Curved Spline Math: Sine wave oscillation from top to bottom
+            const amplitude = Math.min(w * 0.32, 420);
+            const centerX = w / 2;
+            const startY = 80;
+            const endY = h - 160;
+            const currentY = startY + p * (endY - startY);
 
-            // Draw vertical track background
-            stripCtx.fillStyle = '#C84C31';
-            stripCtx.fillRect(15, 0, w - 30, h);
+            // Sine wave horizontal position
+            const sineVal = Math.sin(p * Math.PI * 4);
+            const currentX = centerX + sineVal * amplitude;
 
-            // Black borders
-            stripCtx.fillStyle = '#000000';
-            stripCtx.fillRect(12, 0, 3, h);
-            stripCtx.fillRect(w - 15, 0, 3, h);
+            // Numerical derivative for tangent and normal vector calculation
+            const deltaP = 0.001;
+            const nextY = startY + (p + deltaP) * (endY - startY);
+            const nextX = centerX + Math.sin((p + deltaP) * Math.PI * 4) * amplitude;
 
-            // 3 Lanes white dashed lines
-            stripCtx.strokeStyle = '#FFFFFF';
-            stripCtx.lineWidth = 2;
-            stripCtx.setLineDash([8, 8]);
-            
-            stripCtx.beginPath();
-            stripCtx.moveTo(45, 0); stripCtx.lineTo(45, h);
-            stripCtx.moveTo(75, 0); stripCtx.lineTo(75, h);
-            stripCtx.stroke();
-            stripCtx.setLineDash([]);
+            const dx = nextX - currentX;
+            const dy = nextY - currentY;
+            const len = Math.sqrt(dx * dx + dy * dy) || 1;
 
-            // Position runner sprite vertically based on currentMeter
-            const runnerY = 60 + ((currentMeter / 800) * (h - 120));
-            const laneX = 30 + (currentLane * 30);
+            const tangentX = dx / len;
+            const tangentY = dy / len;
 
-            // Draw Sprite
-            stripCtx.save();
-            stripCtx.translate(laneX, runnerY);
+            // Normal vector (perpendicular to track path direction)
+            const normalX = -tangentY;
+            const normalY = tangentX;
+
+            const angle = Math.atan2(dy, dx);
+
+            return { x: currentX, y: currentY, normalX, normalY, angle };
+        }
+
+        function drawWindingTrack() {
+            if (!trackCtx || !trackCanvas) return;
+            const w = trackCanvas.width;
+            const h = trackCanvas.height;
+
+            trackCtx.clearRect(0, 0, w, h);
+
+            const steps = 600;
+            const points = [];
+            for (let i = 0; i <= steps; i++) {
+                const p = i / steps;
+                points.push(getTrackPointAtProgress(p));
+            }
+
+            // 1. Draw Red Terracotta Track Surface (Width 100px)
+            trackCtx.lineWidth = 110;
+            trackCtx.strokeStyle = '#C84C31';
+            trackCtx.lineCap = 'round';
+            trackCtx.lineJoin = 'round';
+            trackCtx.beginPath();
+            points.forEach((pt, i) => {
+                if (i === 0) trackCtx.moveTo(pt.x, pt.y);
+                else trackCtx.lineTo(pt.x, pt.y);
+            });
+            trackCtx.stroke();
+
+            // 2. Outer Black Borders
+            const drawOffsetLine = (offset, color, width, dash = []) => {
+                trackCtx.lineWidth = width;
+                trackCtx.strokeStyle = color;
+                trackCtx.setLineDash(dash);
+                trackCtx.beginPath();
+                points.forEach((pt, i) => {
+                    const ox = pt.x + pt.normalX * offset;
+                    const oy = pt.y + pt.normalY * offset;
+                    if (i === 0) trackCtx.moveTo(ox, oy);
+                    else trackCtx.lineTo(ox, oy);
+                });
+                trackCtx.stroke();
+                trackCtx.setLineDash([]);
+            };
+
+            drawOffsetLine(-53, '#000000', 4); // Left Border
+            drawOffsetLine(53, '#000000', 4);  // Right Border
+
+            // 3. Lane Dividers (2 inner dashed black lines for 3 lanes)
+            drawOffsetLine(-17, '#000000', 2, [10, 8]); // Lane 1 / Lane 2 divider
+            drawOffsetLine(17, '#000000', 2, [10, 8]);  // Lane 2 / Lane 3 divider
+
+            // 4. Start & Finish Markings
+            if (points.length > 0) {
+                const startPt = points[0];
+                drawTrackMarker(startPt, "START (0M)");
+                const finishPt = points[points.length - 1];
+                drawTrackMarker(finishPt, "FINISH (800M)");
+            }
+
+            // 5. Draw 64-Bit Pixel Runner Sprite on the track
+            const currentP = Math.max(0, Math.min(1, currentMeter / 800));
+            const runnerPt = getTrackPointAtProgress(currentP);
+
+            // Lane Offset (-1: Left, 0: Center, 1: Right) -> [-32px, 0px, +32px]
+            const laneOffset = (currentLane - 1) * 32;
+            const rX = runnerPt.x + runnerPt.normalX * laneOffset;
+            const rY = runnerPt.y + runnerPt.normalY * laneOffset;
+
+            drawRunnerSprite(rX, rY, runnerPt.angle);
+        }
+
+        function drawTrackMarker(pt, label) {
+            trackCtx.save();
+            trackCtx.translate(pt.x, pt.y);
+            trackCtx.rotate(pt.angle);
+
+            // Black Bar Line across track
+            trackCtx.fillStyle = '#000000';
+            trackCtx.fillRect(-4, -50, 8, 100);
+
+            // Label Box
+            trackCtx.fillStyle = '#FFFFFF';
+            trackCtx.strokeStyle = '#000000';
+            trackCtx.lineWidth = 2;
+            trackCtx.fillRect(-45, -12, 90, 24);
+            trackCtx.strokeRect(-45, -12, 90, 24);
+
+            trackCtx.fillStyle = '#000000';
+            trackCtx.font = 'bold 10px Courier New';
+            trackCtx.textAlign = 'center';
+            trackCtx.textBaseline = 'middle';
+            trackCtx.fillText(label, 0, 0);
+
+            trackCtx.restore();
+        }
+
+        function drawRunnerSprite(x, y, angle) {
+            trackCtx.save();
+            trackCtx.translate(x, y);
+
+            // Rotate runner in direction of track curve
+            trackCtx.rotate(angle + Math.PI / 2);
 
             // Shadow
-            stripCtx.fillStyle = 'rgba(0,0,0,0.4)';
-            stripCtx.beginPath();
-            stripCtx.ellipse(0, 12, 12, 5, 0, 0, Math.PI * 2);
-            stripCtx.fill();
+            trackCtx.fillStyle = 'rgba(0,0,0,0.4)';
+            trackCtx.beginPath();
+            trackCtx.ellipse(0, 14, 14, 6, 0, 0, Math.PI * 2);
+            trackCtx.fill();
 
-            // Headband
-            stripCtx.fillStyle = '#111827';
-            stripCtx.fillRect(-6, -24, 12, 10);
-            stripCtx.fillStyle = '#FFFFFF';
-            stripCtx.fillRect(-7, -20, 14, 3);
+            // Headband & Hair
+            trackCtx.fillStyle = '#111827';
+            trackCtx.fillRect(-7, -26, 14, 12);
+            trackCtx.fillStyle = '#FFFFFF';
+            trackCtx.fillRect(-8, -22, 16, 4);
 
             // Face
-            stripCtx.fillStyle = '#FFDBAC';
-            stripCtx.fillRect(-5, -14, 10, 6);
+            trackCtx.fillStyle = '#FFDBAC';
+            trackCtx.fillRect(-6, -14, 12, 6);
 
-            // Red Singlet
-            stripCtx.fillStyle = '#DC2626';
-            stripCtx.fillRect(-7, -8, 14, 12);
-            stripCtx.fillStyle = '#FFFFFF';
-            stripCtx.fillRect(-3, -5, 6, 6);
+            // Red Singlet (Louisville/UNM)
+            trackCtx.fillStyle = '#DC2626';
+            trackCtx.fillRect(-8, -8, 16, 14);
+            trackCtx.fillStyle = '#FFFFFF';
+            trackCtx.fillRect(-3, -5, 6, 7);
 
             // Black Shorts
-            stripCtx.fillStyle = '#000000';
-            stripCtx.fillRect(-7, 4, 14, 5);
+            trackCtx.fillStyle = '#000000';
+            trackCtx.fillRect(-8, 6, 16, 6);
 
             // Running legs
-            const legSwing = Math.sin(currentMeter * 0.3) * 5;
-            stripCtx.fillStyle = '#FFDBAC';
-            stripCtx.fillRect(-5, 9, 4, 7 + legSwing);
-            stripCtx.fillRect(1, 9, 4, 7 - legSwing);
+            const legSwing = Math.sin(currentMeter * 0.3) * 6;
+            trackCtx.fillStyle = '#FFDBAC';
+            trackCtx.fillRect(-6, 12, 5, 8 + legSwing);
+            trackCtx.fillRect(1, 12, 5, 8 - legSwing);
 
             // Neon Yellow Spikes
-            stripCtx.fillStyle = '#CCFF00';
-            stripCtx.fillRect(-6, 16 + legSwing, 5, 3);
-            stripCtx.fillRect(1, 16 - legSwing, 5, 3);
+            trackCtx.fillStyle = '#CCFF00';
+            trackCtx.fillRect(-7, 20 + legSwing, 6, 4);
+            trackCtx.fillRect(1, 20 - legSwing, 6, 4);
 
-            stripCtx.restore();
+            trackCtx.restore();
         }
 
         function drawRadarCanvas() {
@@ -775,7 +892,7 @@
                 
                 currentMeter = Math.round(scrollPercent * 800);
                 updateHUD();
-                drawRunnerStrip();
+                drawWindingTrack();
 
                 if (currentMeter >= 800) {
                     triggerConfetti();
@@ -788,16 +905,20 @@
                 if (e.key === 'ArrowLeft') {
                     currentLane = Math.max(0, currentLane - 1);
                     updateHUD();
-                    drawRunnerStrip();
+                    drawWindingTrack();
                 } else if (e.key === 'ArrowRight') {
                     currentLane = Math.min(2, currentLane + 1);
                     updateHUD();
-                    drawRunnerStrip();
+                    drawWindingTrack();
                 } else if (e.key === 'ArrowDown') {
                     window.scrollBy({ top: 140, behavior: 'smooth' });
                 } else if (e.key === 'ArrowUp') {
                     window.scrollBy({ top: -140, behavior: 'smooth' });
                 }
+            });
+
+            window.addEventListener('resize', () => {
+                resizeTrackCanvas();
             });
         }
 
@@ -848,17 +969,23 @@
             isViewModeFastTrack = !isViewModeFastTrack;
             const arcade = document.getElementById('arcade-container');
             const fastTrack = document.getElementById('fast-track-container');
+            const trackCanvasContainer = document.getElementById('track-canvas-container');
             const btnLabel = document.getElementById('view-mode-label');
 
             if (isViewModeFastTrack) {
                 arcade.classList.add('hidden');
+                trackCanvasContainer.classList.add('hidden');
                 fastTrack.classList.remove('hidden');
                 btnLabel.innerText = "ARCADE TRACK VIEW";
             } else {
                 arcade.classList.remove('hidden');
+                trackCanvasContainer.classList.remove('hidden');
                 fastTrack.classList.add('hidden');
                 btnLabel.innerText = "FAST-TRACK RESUME";
-                setTimeout(drawRadarCanvas, 100);
+                setTimeout(() => {
+                    resizeTrackCanvas();
+                    drawRadarCanvas();
+                }, 100);
             }
         }
 
@@ -868,11 +995,11 @@
             confettiTriggered = false;
             window.scrollTo({ top: 0, behavior: 'smooth' });
             updateHUD();
-            drawRunnerStrip();
+            drawWindingTrack();
         }
 
         window.onload = function() {
-            initRunnerStrip();
+            resizeTrackCanvas();
             drawRadarCanvas();
             bindScrollEvents();
         };
